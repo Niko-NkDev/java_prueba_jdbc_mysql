@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main {
+    // el ejecutable la linea 11 - statick void main es el ejecutable para JAVA
     public static void main(String[] args) {
         //creando una instancia de una clase o un objeto con un constructor vacio o sin parametros
         // se agregan los valores de a uno en uno -
@@ -21,6 +22,7 @@ public class Main {
         System.out.println(persona.toString());
         // creacion de instancia con un constructor con parametros en la clase Persona.java
         Persona persona1 = new Persona(2, "Emma", "Gaviria", 1039697633, "emma@gmail.com", "+57 3146029181");
+        // aqui se puede ver un ejemplo de una actualizacion en un objeto.
         persona1.setNombre("Juan");
         System.out.println(persona1.toString());
         // se crea una objeto de tipo arreglo - [array] de personas
