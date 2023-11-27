@@ -32,8 +32,9 @@ public class MySQLConnectionJDBC {
 
             if (conexion != null) {
                 System.out.println("¡Conexión exitosa con la base de datos!");
+                // se va a escanear  lo que sea entrada -
                 Scanner scanner = new Scanner(System.in);
-                System.out.println("Selecione la operacion a la cual desea ejecutar \n1.consultar \n2.insertar");
+                System.out.println("Selecione la operacion a la cual desea ejecutar \n1.consultar \n2.insertar \n3.actualizar \n4.eliminar");
                 System.out.print("Opcion: ");
                 int operacion = scanner.nextInt();
                 if (operacion == 1){
@@ -54,6 +55,29 @@ public class MySQLConnectionJDBC {
                     persona.setTelefono(scanner.next());
                     // funcion donde esta la logica de insertar - dentro del main
                     insertSQL(conexion, persona);
+                }else if (operacion == 3) {
+                    System.out.println("Ingrese los datos");
+                    Persona persona = new Persona();
+                    System.out.print("id_Persona: ");
+                    persona.setIdPersona(scanner.nextInt());
+                    System.out.print("Nombre: ");
+                    persona.setNombre(scanner.next());
+                    System.out.print("Apellido: ");
+                    persona.setApellido(scanner.next());
+                    System.out.print("Numero de documento: ");
+                    persona.setNumeroDocumento(scanner.nextInt());
+                    System.out.print("Email: ");
+                    persona.setEmail(scanner.next());
+                    System.out.print("Telefono: ");
+                    persona.setTelefono(scanner.next());
+                    // funcion donde esta la logica de actualizar - dentro del main
+                    actualizarSQL(conexion, persona);
+                }
+                else if (operacion == 4){
+                    System.out.println("Ingrese id a eliminar");
+                    Persona persona = new Persona();
+                    persona.setIdPersona(scanner.nextInt());
+                    eliminarSQL(conexion,persona);
                 }else {
                     System.out.println("La operacion ingresada no es correcta.");
                 }
@@ -161,6 +185,66 @@ public class MySQLConnectionJDBC {
             }
         }
 
+    }
+
+    private static void actualizarSQL (Connection conexion, Persona persona){
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            // Consulta parametrizada para la actualización
+            String consultaSQL = "UPDATE persona SET nombre = ?, apellido = ?, numero_documento = ?, email = ?, telefono = ?  WHERE id_persona = ?";
+
+            preparedStatement = conexion.prepareStatement(consultaSQL);
+
+            // Establecer los parámetros de la consulta
+            preparedStatement.setString(1, persona.getNombre());
+            preparedStatement.setString(2, persona.getApellido());
+            preparedStatement.setInt(3, persona.getNumeroDocumento());
+            preparedStatement.setString(4, persona.getEmail());
+            preparedStatement.setString(5, persona.getTelefono());
+            preparedStatement.setInt(6, persona.getIdPersona());
+
+            // Ejecutar la consulta de actualización
+            // encargado de recibir informacion o procesar para luego ejecutarla el ( prepareStatement)
+            int filasAfectadas = preparedStatement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                System.out.println("Actualización exitosa. Filas afectadas: " + filasAfectadas);
+            } else {
+                System.out.println("La actualización no tuvo éxito. La persona con ID " + persona.getIdPersona() + " no fue encontrado.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void eliminarSQL(Connection conexion,Persona persona){
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            String consultaSQL = "DELETE FROM `persona` WHERE id_persona = ?";
+            preparedStatement = conexion.prepareStatement(consultaSQL);
+
+            // Establecer el parámetro de la consulta
+            preparedStatement.setInt(1, persona.getIdPersona());
+
+            // Ejecutar la consulta de eliminación
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                System.out.println("Eliminación exitosa. Filas afectadas: " + filasAfectadas);
+            }else {
+                System.out.println("La eliminación no tuvo éxito. La persona con ID " + persona.getIdPersona() + " no fue encontrado.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
