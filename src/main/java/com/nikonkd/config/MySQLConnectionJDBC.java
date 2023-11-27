@@ -218,6 +218,14 @@ public class MySQLConnectionJDBC {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -244,6 +252,14 @@ public class MySQLConnectionJDBC {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
